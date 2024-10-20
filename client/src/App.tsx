@@ -1,6 +1,6 @@
 import ChatLayout from "./laytout/ChatLayout";
 import Header from "./laytout/Header";
-import Input from "./laytout/input";
+import Input from "./laytout/Input";
 
 function App(): JSX.Element {
   return (
