@@ -1,7 +1,24 @@
-const Input = () => {
+import { useState } from "react";
+
+interface InputProps {
+  onSendMessage: (message: string) => void;
+}
+
+const Input = (props: InputProps) => {
+  const [message, setMessage] = useState("");
+  const { onSendMessage } = props;
+  const handleSendMessage = () => {
+    onSendMessage(message);
+    setMessage("");
+  };
+
   return (
     <div className="fixed bottom-0 w-screen">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <label htmlFor="chat" className="sr-only">
           Your message
         </label>
@@ -11,10 +28,13 @@ const Input = () => {
             rows={1}
             className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Your message..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
           ></textarea>
           <button
             type="submit"
             className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
+            onClick={handleSendMessage}
           >
             <svg
               className="w-6 h-6 rotate-90"
