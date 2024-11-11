@@ -26,7 +26,6 @@ function App(): JSX.Element {
       setIsWaiting(false);
       setIsJoined(true);
       setRoom(roomId);
-      console.log("ytw roomId", roomId);
     });
   };
 
