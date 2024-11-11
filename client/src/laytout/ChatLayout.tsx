@@ -24,7 +24,7 @@ const ChatLayout = (props: ChatLayoutProps) => {
     };
   }, []);
   return (
-    <div className="mx-auto my-[70px] relative max-w-md ">
+    <div className="my-[70px] relative max-w-md ">
       {chatList.map((chat) => {
         if (chat.sender === socket.id) {
           return MyChat(chat.message);
@@ -38,18 +38,34 @@ const ChatLayout = (props: ChatLayoutProps) => {
 
 export default ChatLayout;
 
+/** 내가 보낸 메시지 컴포넌트 */
 const MyChat = (message: string) => {
   return (
-    <div className="w-max max-w-sm m-4 px-4 py-2 text-white rounded-2xl rounded-br-none bg-pink-500">
-      {message}
+    <div className="w-full flex justify-end">
+      <div
+        className="w-max m-2 px-4 py-2 break-words text-white rounded-2xl rounded-br-none bg-pink-500 "
+        style={{
+          maxWidth: "70%",
+        }}
+      >
+        {message}
+      </div>
     </div>
   );
 };
 
+/** 상대가 보낸 메시지 컴포넌트 */
 const OtherChat = (message: string) => {
   return (
-    <div className="w-max max-w-sm m-4 px-4 py-2 rounded-2xl rounded-bl-none bg-gray-200">
-      {message}
+    <div className="w-full flex justify-start">
+      <div
+        className="w-max max-w-sm m-2 px-4 py-2 break-words rounded-2xl rounded-bl-none bg-gray-200 "
+        style={{
+          maxWidth: "70%",
+        }}
+      >
+        {message}
+      </div>
     </div>
   );
 };
