@@ -24,7 +24,7 @@ const ChatLayout = (props: ChatLayoutProps) => {
     };
   }, []);
   return (
-    <div className="my-[70px] relative max-w-md ">
+    <>
       {chatList.map((chat) => {
         if (chat.sender === socket.id) {
           return MyChat(chat.message);
@@ -32,7 +32,7 @@ const ChatLayout = (props: ChatLayoutProps) => {
           return OtherChat(chat.message);
         }
       })}
-    </div>
+    </>
   );
 };
 
