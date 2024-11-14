@@ -1,9 +1,9 @@
 import { io, Socket } from "socket.io-client";
 import ChatLayout from "./laytout/ChatLayout";
-// import Header from "./laytout/Header";
 import Input from "./laytout/Input";
-import JoinRequest from "./laytout/JoinRequest";
 import { useEffect, useState } from "react";
+import Header from "./laytout/Header";
+import JoinRequest from "./laytout/JoinRequest";
 
 let socket: Socket | null = null;
 function App(): JSX.Element {
@@ -36,14 +36,24 @@ function App(): JSX.Element {
     }
   };
 
+  const handleRequestExit = () => {
+    if (socket) {
+      socket.disconnect();
+      setIsJoined(false);
+    }
+  };
+
   return (
     <div id="AppContainer" className="w-screen overflow-hidden">
-      {isJoined && socket ? (
-        <ChatLayout socket={socket} />
+      <Header isJoined={isJoined} handleRequestExit={handleRequestExit} />
+      <div className="my-[70px] relative max-w-md ">
+        {socket && isJoined && <ChatLayout socket={socket} />}
+      </div>
+      {isJoined ? (
+        <Input onSendMessage={handleSendMessage} isJoined={isJoined} />
       ) : (
-        <JoinRequest isWaiting={isWaiting} onRequestJoin={handleRequestJoin} />
+        <JoinRequest onRequestJoin={handleRequestJoin} isWaiting={isWaiting} />
       )}
-      <Input onSendMessage={handleSendMessage} />
     </div>
   );
 }

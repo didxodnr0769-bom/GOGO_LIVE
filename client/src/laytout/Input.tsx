@@ -1,16 +1,25 @@
 import { useState } from "react";
 
 interface InputProps {
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string) => void; // 메시지 전송 이벤트
+  isJoined: boolean; // 방 입장 완료 여부
 }
 
+/**
+ * 레이아웃 하단 입력창 컴포넌트입니다.
+ * @returns
+ */
 const Input = (props: InputProps) => {
   const [message, setMessage] = useState("");
-  const { onSendMessage } = props;
+  const { onSendMessage, isJoined } = props;
   const handleSendMessage = () => {
     onSendMessage(message);
     setMessage("");
   };
+
+  const placeholder = isJoined
+    ? "메세지를 입력해주세요."
+    : "입장을 요청해주세요.";
 
   return (
     <div className="fixed bottom-0 w-screen">
@@ -24,14 +33,16 @@ const Input = (props: InputProps) => {
             type="text"
             id="chat"
             className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="메세지를 입력해주세요."
+            placeholder={placeholder}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            disabled={!isJoined}
           ></input>
           <button
             type="submit"
             className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
             onClick={handleSendMessage}
+            disabled={!isJoined}
           >
             <svg
               className="w-6 h-6 rotate-90"
