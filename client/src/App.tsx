@@ -40,6 +40,7 @@ function App(): JSX.Element {
     if (socket) {
       socket.disconnect();
       setIsJoined(false);
+      socket = null;
     }
   };
 

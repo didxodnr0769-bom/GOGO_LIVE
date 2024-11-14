@@ -9,6 +9,7 @@ interface Chat {
   message: string;
   sender: string;
   time: string;
+  type?: string;
 }
 
 const ChatLayout = (props: ChatLayoutProps) => {
@@ -16,7 +17,6 @@ const ChatLayout = (props: ChatLayoutProps) => {
   const { socket } = props;
   useEffect(() => {
     socket.on("message", (chat: Chat) => {
-      console.log("ytw chat", chat, chatList, socket.id);
       setChatList((prev) => [...prev, chat]);
     });
     return () => {
@@ -26,7 +26,9 @@ const ChatLayout = (props: ChatLayoutProps) => {
   return (
     <>
       {chatList.map((chat) => {
-        if (chat.sender === socket.id) {
+        if (chat.type === "notice") {
+          return NoticeChat(chat.message);
+        } else if (chat.sender === socket.id) {
           return MyChat(chat.message);
         } else {
           return OtherChat(chat.message);
@@ -37,6 +39,15 @@ const ChatLayout = (props: ChatLayoutProps) => {
 };
 
 export default ChatLayout;
+
+/** 공지 메세지 */
+const NoticeChat = (message: string) => {
+  return (
+    <div className="w-full flex justify-center">
+      <div>----{message}----</div>
+    </div>
+  );
+};
 
 /** 내가 보낸 메시지 컴포넌트 */
 const MyChat = (message: string) => {
