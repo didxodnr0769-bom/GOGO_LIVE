@@ -13,6 +13,7 @@ const Input = (props: InputProps) => {
   const [message, setMessage] = useState("");
   const { onSendMessage, isJoined } = props;
   const handleSendMessage = () => {
+    if (!message) return;
     onSendMessage(message);
     setMessage("");
   };
