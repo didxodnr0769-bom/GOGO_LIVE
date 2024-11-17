@@ -55,9 +55,8 @@ function App(): JSX.Element {
     <div id="AppContainer" className="w-screen overflow-hidden">
       <Header isJoined={isJoined} handleRequestExit={handleRequestExit} />
       <div
-        id="test"
         ref={chatRef}
-        className="relative max-w-md "
+        className="relative "
         style={{
           marginTop: "50px",
           paddingBottom: "20px",
