@@ -23,31 +23,48 @@ app.use("/chat", chat);
 let waitQueue: UserInterface[] = [];
 let roomList: RoomInterface[] = [];
 
+const makeClientTime = () => {
+  const time = new Date().toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return time;
+};
+
 // 클라이언트 소켓이 연결되었을 때
 io.on("connection", (socket) => {
   waitQueue.push({ id: socket.id, socket });
 
   // 특정 방에 메시지를 보낼 때
   socket.on("message", ({ room, message }) => {
-    const time = new Date().toLocaleTimeString();
     io.to(room).emit("message", {
       message,
-      time,
+      time: makeClientTime(),
       sender: socket.id,
       type: "normal",
+    });
+  });
+
+  // 방 입장 성공 시 메시지 수신
+  socket.on("success join room", () => {
+    socket.emit("message", {
+      message: "채팅에 입장되었습니다.",
+      time: makeClientTime(),
+      sender: "Server",
+      type: "notice",
     });
   });
 
   // disconnect 이벤트 핸들러
   socket.on("disconnecting", () => {
     const disconnectRoom = Array.from(socket.rooms)[1];
-    const time = new Date().toLocaleTimeString();
 
     // 연결된 룸이 있을 경우
     if (disconnectRoom) {
       io.to(disconnectRoom).emit("message", {
         message: "상대방이 연결을 종료하였습니다.",
-        time,
+        time: makeClientTime(),
         sender: "Server",
         type: "notice",
       });
@@ -73,12 +90,6 @@ const createRoom = (userList: UserInterface[]) => {
   userList.forEach((user) => {
     user.socket.emit("join room", roomId);
     user.socket.join(roomId);
-    user.socket.emit("message", {
-      message: "채팅에 입장되었습니다.",
-      time: new Date().toLocaleTimeString(),
-      sender: "Server",
-      type: "notice",
-    });
   });
   roomList.push(room);
 };

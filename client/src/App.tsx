@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import ChatLayout from "./laytout/ChatLayout";
 import Input from "./laytout/Input";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "./laytout/Header";
 import JoinRequest from "./laytout/JoinRequest";
 
@@ -10,6 +10,7 @@ function App(): JSX.Element {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [room, setRoom] = useState("");
+  const chatRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     return () => {
       if (socket) socket.disconnect();
@@ -33,6 +34,12 @@ function App(): JSX.Element {
   const handleSendMessage = (message: string) => {
     if (socket) {
       socket.emit("message", { message, room });
+
+      setTimeout(() => {
+        if (chatRef.current) {
+          chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+      }, 10);
     }
   };
 
@@ -47,8 +54,17 @@ function App(): JSX.Element {
   return (
     <div id="AppContainer" className="w-screen overflow-hidden">
       <Header isJoined={isJoined} handleRequestExit={handleRequestExit} />
-      <div className="my-[70px] relative max-w-md ">
-        {socket && isJoined && <ChatLayout socket={socket} />}
+      <div
+        ref={chatRef}
+        className="relative "
+        style={{
+          marginTop: "50px",
+          paddingBottom: "20px",
+          height: "calc(100vh - 90px)",
+          overflowY: "scroll",
+        }}
+      >
+        {socket && isJoined && <ChatLayout socket={socket} chatRef={chatRef} />}
       </div>
       {isJoined ? (
         <Input onSendMessage={handleSendMessage} isJoined={isJoined} />
