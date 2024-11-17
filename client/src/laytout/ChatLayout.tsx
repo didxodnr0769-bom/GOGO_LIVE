@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
+import { Chat } from "../interface/Chat";
+import { SUCCESS_JOIN_ROOM_KEY } from "../constants/Message";
 
 interface ChatLayoutProps {
   socket: Socket;
-}
-
-interface Chat {
-  message: string;
-  sender: string;
-  time: string;
-  type?: string;
+  chatRef: React.RefObject<HTMLDivElement>;
 }
 
 const ChatLayout = (props: ChatLayoutProps) => {
   const [chatList, setChatList] = useState<Chat[]>([]);
-  const { socket } = props;
+  const { socket, chatRef } = props;
   useEffect(() => {
+    // 룸 진입 완료 메세지 발신
+    socket.emit(SUCCESS_JOIN_ROOM_KEY);
     socket.on("message", (chat: Chat) => {
       setChatList((prev) => [...prev, chat]);
     });
@@ -23,6 +21,12 @@ const ChatLayout = (props: ChatLayoutProps) => {
       socket.off("message");
     };
   }, []);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current?.scrollTo(0, chatRef.current.scrollHeight);
+    }
+  }, [chatList]);
   return (
     <>
       {chatList.map((chat) => {

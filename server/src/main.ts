@@ -38,6 +38,16 @@ io.on("connection", (socket) => {
     });
   });
 
+  // 방 입장 성공 시 메시지 수신
+  socket.on("success join room", () => {
+    socket.emit("message", {
+      message: "채팅에 입장되었습니다.",
+      time: new Date().toLocaleTimeString(),
+      sender: "Server",
+      type: "notice",
+    });
+  });
+
   // disconnect 이벤트 핸들러
   socket.on("disconnecting", () => {
     const disconnectRoom = Array.from(socket.rooms)[1];
@@ -73,12 +83,6 @@ const createRoom = (userList: UserInterface[]) => {
   userList.forEach((user) => {
     user.socket.emit("join room", roomId);
     user.socket.join(roomId);
-    user.socket.emit("message", {
-      message: "채팅에 입장되었습니다.",
-      time: new Date().toLocaleTimeString(),
-      sender: "Server",
-      type: "notice",
-    });
   });
   roomList.push(room);
 };
