@@ -33,9 +33,9 @@ const ChatLayout = (props: ChatLayoutProps) => {
         if (chat.type === "notice") {
           return NoticeChat(chat.message);
         } else if (chat.sender === socket.id) {
-          return MyChat(chat.message);
+          return MyChat(chat);
         } else {
-          return OtherChat(chat.message);
+          return OtherChat(chat);
         }
       })}
     </>
@@ -54,9 +54,11 @@ const NoticeChat = (message: string) => {
 };
 
 /** 내가 보낸 메시지 컴포넌트 */
-const MyChat = (message: string) => {
+const MyChat = (chat: Chat) => {
+  const { message, time } = chat;
   return (
     <div className="w-full flex justify-end">
+      <div className="flex items-end pb-3 text-xs">{time}</div>
       <div
         className="w-max m-2 px-4 py-2 break-words text-white rounded-2xl rounded-br-none bg-pink-500 "
         style={{
@@ -70,7 +72,8 @@ const MyChat = (message: string) => {
 };
 
 /** 상대가 보낸 메시지 컴포넌트 */
-const OtherChat = (message: string) => {
+const OtherChat = (chat: Chat) => {
+  const { message, time } = chat;
   return (
     <div className="w-full flex justify-start">
       <div
@@ -81,6 +84,7 @@ const OtherChat = (message: string) => {
       >
         {message}
       </div>
+      <div className="flex items-end pb-3 text-xs">{time}</div>
     </div>
   );
 };
