@@ -38,6 +38,9 @@ const ChatLayout = (props: ChatLayoutProps) => {
           return OtherChat(chat);
         }
       })}
+
+      {/* {true && TypingChat()} */}
+      <TypingChat />
     </>
   );
 };
@@ -85,6 +88,32 @@ const OtherChat = (chat: Chat) => {
         {message}
       </div>
       <div className="flex items-end pb-3 text-xs">{time}</div>
+    </div>
+  );
+};
+
+const TypingChat = () => {
+  const [pointCount, setPointCount] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPointCount((prev) => (prev + 1) % 4);
+    }, 300);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div className="w-full flex justify-start">
+      <div
+        className="w-max max-w-sm m-2 px-4 py-2 break-words rounded-2xl rounded-bl-none bg-gray-100"
+        style={{
+          maxWidth: "70%",
+        }}
+      >
+        입력중{Array.from({ length: pointCount }).map(() => ".")}
+      </div>
     </div>
   );
 };
