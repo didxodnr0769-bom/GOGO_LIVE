@@ -78,6 +78,10 @@ io.on("connection", (socket) => {
       );
     }
   });
+  // 입력중 상태 수신 및 전달
+  socket.on("userTyping", ({ room, isTyping }) => {
+    socket.to(room).emit("userTyping", { isTyping, sender: socket.id });
+  });
 });
 
 const createRoom = (userList: UserInterface[]) => {

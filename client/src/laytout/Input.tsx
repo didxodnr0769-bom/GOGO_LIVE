@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InputProps {
   onSendMessage: (message: string) => void; // 메시지 전송 이벤트
+  onSendTyping: (isTyping: boolean) => void; // 타이핑 전송 이벤트
   isJoined: boolean; // 방 입장 완료 여부
 }
 
@@ -11,11 +12,29 @@ interface InputProps {
  */
 const Input = (props: InputProps) => {
   const [message, setMessage] = useState("");
-  const { onSendMessage, isJoined } = props;
+  const { onSendMessage, isJoined, onSendTyping } = props;
+  const [isTyping, setIsTyping] = useState(false);
+
+  // 메세지 입력 시 타이핑 상태 변경
+  useEffect(() => {
+    setIsTyping(message.length > 0);
+
+    const interval = setTimeout(() => {
+      setIsTyping(false);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [message]);
+
+  // 타이핑 상태 변경 시 서버 전송
+  useEffect(() => {
+    onSendTyping(isTyping);
+  }, [isTyping]);
+
   const handleSendMessage = () => {
     if (!message) return;
     onSendMessage(message);
     setMessage("");
+    setIsTyping(false);
   };
 
   const placeholder = isJoined

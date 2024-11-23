@@ -10,6 +10,7 @@ interface ChatLayoutProps {
 
 const ChatLayout = (props: ChatLayoutProps) => {
   const [chatList, setChatList] = useState<Chat[]>([]);
+  const [isOtherUserTyping, setIsOtherUserTyping] = useState(false);
   const { socket, chatRef } = props;
   useEffect(() => {
     // 룸 진입 완료 메세지 발신
@@ -17,6 +18,13 @@ const ChatLayout = (props: ChatLayoutProps) => {
     socket.on("message", (chat: Chat) => {
       setChatList((prev) => [...prev, chat]);
     });
+
+    // 상대 타이핑
+    socket.on("userTyping", ({ isTyping, sender }) => {
+      if (sender === socket.id) return;
+      setIsOtherUserTyping(isTyping);
+    });
+
     return () => {
       socket.off("message");
     };
@@ -27,6 +35,7 @@ const ChatLayout = (props: ChatLayoutProps) => {
       chatRef.current?.scrollTo(0, chatRef.current.scrollHeight);
     }
   }, [chatList]);
+
   return (
     <>
       {chatList.map((chat) => {
@@ -39,8 +48,7 @@ const ChatLayout = (props: ChatLayoutProps) => {
         }
       })}
 
-      {/* {true && TypingChat()} */}
-      <TypingChat />
+      {isOtherUserTyping && <TypingChat />}
     </>
   );
 };
