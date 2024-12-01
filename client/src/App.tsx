@@ -4,12 +4,15 @@ import Input from "./laytout/Input";
 import { useEffect, useRef, useState } from "react";
 import Header from "./laytout/Header";
 import JoinRequest from "./laytout/JoinRequest";
+import PortfolioNoticePopup from "./laytout/PortfolioNoticePopup";
 
 let socket: Socket | null = null;
 function App(): JSX.Element {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [room, setRoom] = useState("");
+  // 초기 팝업 표출 여부 (포트폴리오용 프로젝트)
+  const [isNoticed, setIsNoticed] = useState(true);
   const chatRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     return () => {
@@ -70,6 +73,13 @@ function App(): JSX.Element {
         <Input onSendMessage={handleSendMessage} isJoined={isJoined} />
       ) : (
         <JoinRequest onRequestJoin={handleRequestJoin} isWaiting={isWaiting} />
+      )}
+      {isNoticed && (
+        <PortfolioNoticePopup
+          onClick={() => {
+            setIsNoticed(false);
+          }}
+        />
       )}
     </div>
   );
