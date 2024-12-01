@@ -30,6 +30,7 @@ function App(): JSX.Element {
       setIsWaiting(false);
       setIsJoined(true);
       setRoom(roomId);
+      console.log("ytw 룸 입장 - roomId : ", socket?.id, roomId);
     });
   };
 
@@ -53,6 +54,12 @@ function App(): JSX.Element {
       socket = null;
     }
   };
+  // 타이핑 상태 전송
+  const handleSendTyping = (isTyping: boolean) => {
+    if (socket) {
+      socket.emit("userTyping", { isTyping, room });
+    }
+  };
 
   return (
     <div id="AppContainer" className="w-screen overflow-hidden">
@@ -70,7 +77,11 @@ function App(): JSX.Element {
         {socket && isJoined && <ChatLayout socket={socket} chatRef={chatRef} />}
       </div>
       {isJoined ? (
-        <Input onSendMessage={handleSendMessage} isJoined={isJoined} />
+        <Input
+          isJoined={isJoined}
+          onSendMessage={handleSendMessage}
+          onSendTyping={handleSendTyping}
+        />
       ) : (
         <JoinRequest onRequestJoin={handleRequestJoin} isWaiting={isWaiting} />
       )}
