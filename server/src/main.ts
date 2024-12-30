@@ -19,6 +19,9 @@ const io = new Server(server, {
 
 app.use("/user", user);
 app.use("/chat", chat);
+app.get("/api", (req, res) => {
+  res.json({ message: "Hello from Express!" });
+});
 
 let waitQueue: UserInterface[] = [];
 let roomList: RoomInterface[] = [];
