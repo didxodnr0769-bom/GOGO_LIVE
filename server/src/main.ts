@@ -16,7 +16,9 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 app.use("/user", user);
 app.use("/chat", chat);
 app.get("/api", (req, res) => {
