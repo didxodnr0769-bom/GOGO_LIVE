@@ -22,7 +22,7 @@ const io = new socket_io_1.Server(server, {
   },
 });
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World!이건되는ㄱ덧");
 });
 app.use("/user", userRoute_1.default);
 app.use("/chat", chatRoute_1.default);
@@ -111,3 +111,4 @@ setInterval(() => {
 server.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+exports.default = server;
