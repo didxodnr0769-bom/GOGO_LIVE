@@ -12,7 +12,7 @@ app.use(cors()); // 모든 도메인에서 접근 가능하게 설정
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // 리액트 앱이 실행되는 포트
+    origin: "http://192.168.45.63:5173",
     methods: ["GET", "POST"],
   },
 });

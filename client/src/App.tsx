@@ -6,6 +6,8 @@ import Header from "./laytout/Header";
 import JoinRequest from "./laytout/JoinRequest";
 import PortfolioNoticePopup from "./laytout/PortfolioNoticePopup";
 
+const SERVER_URL = "http://192.168.45.63:3000";
+
 let socket: Socket | null = null;
 function App(): JSX.Element {
   const [isWaiting, setIsWaiting] = useState(false);
@@ -22,7 +24,7 @@ function App(): JSX.Element {
 
   /** 입장 요청 */
   const handleRequestJoin = () => {
-    socket = io("http://localhost:3000"); // 서버 주소와 동일하게 설정
+    socket = io(SERVER_URL); // 서버 주소와 동일하게 설정
     setIsWaiting(true);
 
     // 방 매칭 완료
