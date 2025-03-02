@@ -1,6 +1,6 @@
 # GOGO_LIVE
 
-![image](./assets/gogo_live.gif)
+<img src="./assets/gogo_live.gif" alt="설명" width="200" />
 
 ## ✅ 개요
 
